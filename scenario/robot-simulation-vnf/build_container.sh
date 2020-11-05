@@ -1,12 +1,10 @@
 #!/bin/bash
 # Assemble docker image. 
+echo 'Remember that you need to list and add your xauth keys into the Dockerfile for this to work.'
 
-ROS_MASTER_URI="http://10.0.1.2:11311"
-ROS_IP="10.0.1.2"
 
-INTERFACE_HOST="10.0.1.4"
-CONTROL_HOST="10.0.1.3"
-
+XAUTH_KEYS_="$(xauth list $HOSTNAME/unix:0)"
+sudo docker build . -t niryo-one-sim --build-arg "XAUTH_KEYS_=$XAUTH_KEYS_"
 
 # 5TONIC Networking settings
 #sudo docker run \
@@ -32,15 +30,17 @@ CONTROL_HOST="10.0.1.3"
 #	--user root \
 
 # 5TONIC Networking settings
-docker run \
+sudo docker run \
         --hostname niryo-one-sim \
-        -dit \
-        --hostname niryo-one-sim \
+        -it \
+        --rm \
         --network test-net \
-        --ip=$ROS_IP \
-        -e ROS_IP=$ROS_IP \
-        -e ROS_MASTER_URI=$ROS_MASTER_URI \
+        --ip=10.0.1.1 \
+        -e ROS_IP=10.0.1.1 \
+        -e ROS_MASTER_URI=http://10.0.1.1:11311 \
         --add-host niryo-one-sim:127.0.0.1 \
-        --add-host niryo-one-interface:$INTERFACE_HOST \
-        --add-host niryo-one-control:$CONTROL_HOST \
-        niryo-one-sim:latest 
+        --add-host niryo-one-interface:10.0.1.3 \
+        --add-host niryo-one-control:10.0.1.2 \
+        niryo-one-sim:latest \
+#       bash
+#       --user root \

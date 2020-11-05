@@ -3,7 +3,7 @@ FROM ros:kinetic
 MAINTAINER cmagalha@pa.uc3m.es
 
 WORKDIR /root
-RUN useradd -ms /bin/bash niryo-one-sim
+RUN useradd -ms /bin/bash niryo
 
 # Install system dependencies. 
 RUN \
