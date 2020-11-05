@@ -44,6 +44,4 @@
         <param name="sequence_autorun_status_file" type="string" value="~/sequence_autorun_status.txt" if="$(arg simulation_mode)"/>
     </node>
 
- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find niryo_one_description)/config/default_config.rviz" />
-
 </launch>
