@@ -34,7 +34,7 @@ CONTROL_HOST="10.0.1.3"
 # 5TONIC Networking settings
 docker run \
         --hostname niryo-one-sim \
-        -dit \
+        -it \
         --hostname niryo-one-sim \
         --network test-net \
         --ip=$ROS_IP \
