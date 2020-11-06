@@ -2,21 +2,23 @@
 # Assemble docker image. 
 echo 'Remember that you need to list and add your xauth keys into the Dockerfile for this to work.'
 
-# 5TONIC Networking settings
-#ROS_MASTER_URI="http://169.254.210.4:11311"
-#ROS_IP="169.254.210.3"
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+    exit 1
+fi
 
 # Lab Networking settings
-ROS_MASTER_URI="http://10.0.1.2:11311"
-ROS_IP="10.0.1.4"
+ROS_MASTER_URI="http://10.0.1.$1:11311"
+ROS_IP="10.0.1.$(($1 + 2))"
 
-CONTROL_HOST="10.0.1.3"
-SIM_HOST="10.0.1.2"
+CONTROL_HOST="10.0.1.$(($1 + 1))"
+SIM_HOST="10.0.1.$1"
 
 # Lab Networking settings
 docker run \
         --hostname niryo-one-interface \
-        -it \
+        -dit \
         --rm \
         --net=test-net \
         --ip=$ROS_IP \
