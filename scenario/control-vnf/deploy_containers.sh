@@ -2,17 +2,19 @@
 # Assemble docker image. 
 echo 'Remember that you need to list and add your xauth keys into the Dockerfile for this to work.'
 
-# ROS variables phisical robot
-#ROS_MASTER_URI="http://169.254.200.200:11311"
-#ROS_MASTER_URI="http://169.254.210.4:11311"
-#ROS_IP="169.254.210.1"
+
+if [ $# -eq 0 ]
+  then
+    echo "No arguments supplied"
+    exit 1
+fi
 
 # ROS variables simulated robot
-ROS_MASTER_URI="http://10.0.1.2:11311"
-ROS_IP="10.0.1.3"
+ROS_MASTER_URI="http://10.0.1.$1:11311"
+ROS_IP="10.0.1.$(($1 + 1))"
 
-INTERFACE_HOST="10.0.1.4"
-SIM_HOST="10.0.1.2"
+INTERFACE_HOST="10.0.1.$(($1 + 2))"
+SIM_HOST="10.0.1.$1"
 
 
 # Networking settings phisical robot
@@ -41,7 +43,7 @@ SIM_HOST="10.0.1.2"
 # Networking settings simulated robot
 docker run \
        --hostname niryo-one-control \
-       -it \
+       -dit \
        --network test-net \
        --ip=$ROS_IP \
        -e ROS_MASTER_URI=$ROS_MASTER_URI \
