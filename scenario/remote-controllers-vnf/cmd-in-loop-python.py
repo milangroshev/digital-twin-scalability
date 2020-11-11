@@ -100,7 +100,7 @@ if __name__=="__main__":
                 start_time = time.time()
                 move_to_position(n, position, cmd_speed)
                 elapsed = time.time() - start_time
-                logging("name", elapsed, position)
+                logging(name, elapsed, position)
 
         except NiryoOneException as e:
             print e 

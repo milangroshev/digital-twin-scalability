@@ -20,4 +20,8 @@ for i in `seq 2 3 $step`; do
 
     sleep 2
 
+    /home/niryo/digital-twin-scalability/scenario/remote-controllers-vnf/run_container.sh $i
+
+    sleep 60 
+
 done
