@@ -47,5 +47,5 @@ for i in [122, 125, 128, 131, 134, 137, 140, 143, 146, 149, 152]:
 
     df_all_data.index = df_all_data.index + 1
 
-df_all_data = df_all_data.sort_values("timestamp", ascending=False)
+df_all_data = df_all_data.sort_values("timestamp", ascending=True)
 df_all_data.to_csv(sys.argv[1]+"/digital-twin-dataset.csv", index=False)
