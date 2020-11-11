@@ -13,9 +13,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# To use the API, copy these 4 lines on each Python file you create
-from niryo_one_python_api.niryo_one_api import *
-import rospy
 import time
 import datetime
 import csv
@@ -23,6 +20,11 @@ from sensor_msgs.msg import JointState
 import sys, select, termios, tty
 import argparse
 import socket
+
+import rospy
+from sensor_msgs.msg import JointState
+from trajectory_msgs.msg import JointTrajectory
+from trajectory_msgs.msg import JointTrajectoryPoint
 
 name = socket.gethostbyname(socket.gethostname())
 last_position = [0, 0, 0, 0, 0, 0]
@@ -58,73 +60,73 @@ def logging(event, hw_timestamp, position):
   sys.stdout.flush()
 
 
-def move_to_position(n,pos,cmd_speed):
-  global moving, last_position, init_time
-
+def move_to_position(p,pos,cmd_speed):
   rtime = rospy.Time.now()
 
   # Save last position command
+  global moving, last_position, init_time
   last_position = pos
   moving = True
   init_time = rtime.secs * 1000000000 + rtime.nsecs
 
-  n.move_joints(pos)
+  msg = JointTrajectory()
+  msg.header.stamp = rtime
+  msg.joint_names = ['joint_1', 'joint_2', 'joint_3', # X, Y, Z
+                     'joint_4', 'joint_5', 'joint_6'] # Not supported yet
+
+  point = JointTrajectoryPoint()
+  point.positions = pos
+  point.time_from_start = rospy.Duration(cmd_speed)
+  msg.points = [point]
+  p.publish(msg)
 
 def callback_joint_states(joint_states):
-  global moving, last_position, init_time
-
   rtime = rospy.Time.now()
-
+  global moving, last_position, init_time
+  print(last_position, " : ", joint_states.position)
   diff = [abs(x1 - x2) for (x1, x2) in zip(last_position, joint_states.position)]
   if all(x < 0.0001 for x in diff) == True:
+    print("\n\nEqual")
     if moving == True:
       moving = False
       elapsed_time = (rtime.secs * 1000000000 + rtime.nsecs) - init_time
       logging(name, elapsed_time / 1000000, position)
-      print("Execution time: ", elapsed_time / 1000000, "ms")
+      print("\n\nlog")
+      #print("Execution time: ", elapsed_time / 1000000, "ms")
 
 if __name__=="__main__":
-    rospy.init_node('niryo_one_example_python_api')
-    n = NiryoOne()
+  # Variables
+  cmd_speed = args.cmd_speed
+  key_offset = args.key_offset
+  position = [0, 0, 0, 0, 0, 0]
+  last_positon = position
 
-    # Calibrate robot first
-    n.calibrate_auto()
-    print "Calibration performed!"
-    
-    # Variables
-    cmd_speed = args.cmd_speed
-    key_offset = args.key_offset
-    position = [0, 0, 0, 0, 0, 0]    
+  rospy.init_node('niryo_one_example_python_api')
+
+  pub = rospy.Publisher('/niryo_one_follow_joint_trajectory_controller/command',
+                         JointTrajectory, queue_size=1, tcp_nodelay=True)
+  print("Waiting 2 Seconds to connect.")
+  time.sleep(2)
+
+  # Move to initial position
+  print("Waiting 2 Seconds to move to initial position...")
+  move_to_position(pub, position, cmd_speed)
+  time.sleep(2)
+
+  # Subscribe current pose, only after the initial state is set
+  sub = rospy.Subscriber('/joint_states', JointState, callback_joint_states)
+  time.sleep(2)
    
-    n.set_arm_max_velocity(100)
-    print("Waiting 2 Seconds to connect")
-    time.sleep(2)
+  while(True):
+    try:
+      for x in range(-1, -50, -1) + range(1, 50, 1):
+        position[0] += (1 if x > 0 else -1) * key_offset
+        position[1] += (1 if x > 0 else -1) * key_offset
+        position[2] += (1 if x > 0 else -1) * key_offset
+        move_to_position(pub, position, cmd_speed)
+        print("move")
+        time.sleep(1)
 
-    # Move to initial position
-    print("Waiting 2 Seconds to move to initial position...")
-    ipos = False
-    while ipos == False:
-      try:
-        move_to_position(n, position, cmd_speed)
-        time.sleep(2)
-        ipos = True
-      except Exception as e:
-        print(e) 
-  
-    # Subscribe current pose, only after the initial state is set
-    sub = rospy.Subscriber('/joint_states', JointState, callback_joint_states)
-    time.sleep(2)
-    while(True):
-        try:
-            for x in range(-1, -50, -1) + range(1, 50, 1):
-                position[0] += (1 if x > 0 else -1) * key_offset
-                position[1] += (1 if x > 0 else -1) * key_offset
-                position[2] += (1 if x > 0 else -1) * key_offset
-  #              start_time = time.time()
-                move_to_position(n, position, cmd_speed)
-   #             elapsed = time.time() - start_time
-   #             logging(name, elapsed, position)
-                time.sleep(1)
+    except Exception as e:
+      print(e) 
 
-        except NiryoOneException as e:
-            print(e)

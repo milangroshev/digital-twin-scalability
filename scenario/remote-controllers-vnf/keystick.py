@@ -73,12 +73,11 @@ def logging(event, hw_timestamp, position):
                "{:.3f}".format(position[5])])
 
 def callback_joint_states(joint_states):
-  rtime = rospy.Time.now()
-  logging("pose_received",
-          joint_states.header.stamp.secs * 1000000000 + joint_states.header.stamp.nsecs,
-          joint_states.position)
-
   global moving, last_position, init_time
+
+  rtime = rospy.Time.now()
+  print(joint_states.position)
+
   diff = [abs(x1 - x2) for (x1, x2) in zip(last_position, joint_states.position)]
   if all(x < 0.0001 for x in diff) == True:
     if moving == True:
@@ -94,6 +93,8 @@ def getKey():
 
 # TODO: Split each mode into different functions
 def move_to_position(p, n, a, pos, cmd_speed, mode):
+  global moving, last_position, init_time
+
   rtime = rospy.Time.now()
   if mode == "interface":
     # Interface
@@ -125,7 +126,6 @@ def move_to_position(p, n, a, pos, cmd_speed, mode):
     p.publish(msg)
 
   # Save last position command
-  global moving, last_position, init_time
   last_position = pos
   moving = True
   init_time = rtime.secs * 1000000000 + rtime.nsecs
@@ -153,7 +153,7 @@ if __name__=="__main__":
 
   # Move to initial position
   print("Waiting 2 Seconds to move to initial position...")
-#  move_to_position(pub, n, m, position, cmd_speed, mode)
+  move_to_position(pub, n, m, position, cmd_speed, mode)
   n.move_joints([0,0,0,0,0,0]) 
   time.sleep(2)
 

@@ -12,7 +12,7 @@ INTER_HOST="10.0.1.$(($1 + 2))"
 
 docker run \
   --hostname niryo-one-dtwin \
-  -it \
+  -dit \
   --rm \
   --net=test-net \
   --ip=$ROS_IP \

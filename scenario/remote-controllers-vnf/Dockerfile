@@ -32,10 +32,12 @@ RUN cd catkin_ws && bash -c "source /opt/ros/kinetic/setup.bash && catkin_make"
 
 ADD keystick.py .
 ADD cmd-in-loop-python.py .
+ADD cmd-in-loop-control.py .
 
 RUN mkdir logs
 
-CMD bash -c "source /opt/ros/kinetic/setup.bash && source catkin_ws/devel/setup.bash && python ./cmd-in-loop-python.py"
+#CMD bash -c "source /opt/ros/kinetic/setup.bash && source catkin_ws/devel/setup.bash && python ./cmd-in-loop-python.py"
+CMD bash -c "source /opt/ros/kinetic/setup.bash && source catkin_ws/devel/setup.bash && python ./cmd-in-loop-control.py"
 
 #CMD bash -c "source /opt/ros/kinetic/setup.bash && source catkin_ws/devel/setup.bash && python ./keystick.py"
 
