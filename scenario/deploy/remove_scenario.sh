@@ -11,6 +11,10 @@
     
     ssh niryo@10.5.1.200 /home/niryo/digital-twin-scalability/scenario/robot-simulation-vnf/remove_containers.sh
 
+    sleep 2
 
+    /home/niryo/digital-twin-scalability/scenario/remote-controllers-vnf/remove_containers.sh
 
+    sleep 2
+    
 
