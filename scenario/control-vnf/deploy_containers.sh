@@ -15,7 +15,7 @@ ROS_IP="10.0.1.$(($1 + 1))"
 
 INTERFACE_HOST="10.0.1.$(($1 + 2))"
 SIM_HOST="10.0.1.$1"
-
+REMOTE_HOST="10.0.1.$(($1 + 120))"
 
 # Networking settings phisical robot
 #sudo docker run \
@@ -48,6 +48,7 @@ docker run \
        --ip=$ROS_IP \
        -e ROS_MASTER_URI=$ROS_MASTER_URI \
        -e ROS_IP=$ROS_IP \
+       --add-host niryo-one-dtwin:$REMOTE_HOST \
        --add-host niryo-one-control:127.0.0.1 \
        --add-host niryo-one-interface:$INTERFACE_HOST \
        --add-host niryo-one-sim:$SIM_HOST \
