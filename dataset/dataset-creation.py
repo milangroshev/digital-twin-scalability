@@ -37,7 +37,15 @@ for i in [122, 125, 128, 131, 134, 137, 140, 143, 146, 149, 152]:
       rx = prev_rx
     instances = df_instances_data[df_instances_data["timestamp"] < row["timestamp"]].iloc[-1]["num-instances"]
 
-    df_all_data.loc[-1] = [row["timestamp"], row["node"], row["latency"], row["action"], cpu, ram, tx - prev_tx, rx - prev_rx, instances]
+    df_all_data.loc[-1] = [row["timestamp"],
+                           row["node"],
+                           "NaN" if math.isnan(row["latency"]) else row["latency"],
+                           row["action"],
+                           cpu,
+                           ram,
+                           tx - prev_tx,
+                           rx - prev_rx,
+                           instances]
 
     prev_ts = row['timestamp']
     prev_cpu = cpu
