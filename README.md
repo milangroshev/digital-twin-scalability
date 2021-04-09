@@ -2,8 +2,9 @@
 Dataset from a Digital Twin comprising a Niryo One robot manipulator
 
 ## Citations
-If you find this dataset useful in your research, we would appreciate citations to the following paper:
+If you find this dataset useful in your research, we would appreciate citations to the following papers:
 
+ 1) Digital Twin service used to collect the dataset:
 ```
 @INPROCEEDINGS{9367549,
   author={L. {Girletti} and M. {Groshev} and C. {Guimarães} and C. J. {Bernardos} and A. {de la Oliva}},
@@ -14,5 +15,22 @@ If you find this dataset useful in your research, we would appreciate citations 
   number={},  
   pages={1-6},  
   doi={10.1109/GCWkshps50303.2020.9367549}
+}
+```
+
+ 2) SLA management via scaling making use of this dataset:
+```
+@INPROCEEDINGS{Bara2105:Demo,
+  author="Jorge Baranda and Josep Mangues-Bafalluy and Engin Zeydan and Claudio E.
+  Casetti and Carla Fabiana Chiasserini and Marco Malinverno and Corrado
+  Puligheddu and Milan Groshev and Carlos {Guimarães} and Konstantin Tomakh
+  and Denys Kucherenko and Oleksii Kolodiazhnyi",
+  title="Demo: {AIML-as-a-Service} for {SLA} management of a Digital Twin Virtual
+  Network Service",
+  booktitle="IEEE INFOCOM 2021 Demo (IEEE INFOCOM Demo 2021)",
+  address=virtual,
+  days=10,
+  month=may,
+  year=2021,
 }
 ```
