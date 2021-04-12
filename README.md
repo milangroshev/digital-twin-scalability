@@ -1,6 +1,11 @@
 # Digital Twin Scalability Dataset
 Dataset from a Digital Twin comprising a Niryo One robot manipulator
 
+ - Micro dataset: new robot instance is added every 60 seconds (dataset available [here](./digital-twin-service/ros-master/)).
+ - Small dataset: new robot instance is added every 300 seconds (dataset available [here](./digital-twin-service/ros-master/)).
+ - Big dataset:   new robot instance is added every 3600 seconds (dataset available [here](./digital-twin-service/ros-master/)).
+   - labeled version is available of the big dataset that is used to train Random Forest classifier. (dataset available [here](./digital-twin-service/ros-master/)).  
+
 ## Citations
 If you find this dataset useful in your research, we would appreciate citations to the following papers:
 
