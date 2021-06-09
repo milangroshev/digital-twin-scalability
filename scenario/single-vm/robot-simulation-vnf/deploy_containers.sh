@@ -26,4 +26,4 @@ docker run \
         -e ROS_MASTER_URI=$ROS_MASTER_URI \
         --add-host niryo-one-sim:127.0.0.1 \
         --add-host niryo-stack:$STACK_HOST \
-        niryo-one-sim:latest 
+        niryo-sim-drivers:latest 
