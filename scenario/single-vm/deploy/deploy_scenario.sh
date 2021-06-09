@@ -2,28 +2,19 @@
 
 instances=$1
 
-step=$(($instances * 3))
+step=$(($instances * 2))
 
-for i in `seq 2 3 $step`; do 
+for i in `seq 2 2 $step`; do 
     
     echo $i;
-    ssh niryo@10.5.1.200 /home/niryo/digital-twin-scalability/scenario/robot-simulation-vnf/deploy_containers.sh $i
+    ssh user@10.5.1.167 /home/user/digital-twin-scalability/scenario/single-vm/robot-simulation-vnf/deploy_containers.sh $i
 
     sleep 20
 
-    ssh niryo@10.5.1.201 /home/niryo/digital-twin-scalability/scenario/control-vnf/deploy_containers.sh $i
+    ssh user@10.5.1.156 /home/user/digital-twin-scalability/scenario/single-vm/niryo-one-stack/deploy_containers.sh $i
 
     sleep 20
-
-    ssh niryo@10.5.1.202 /home/niryo/digital-twin-scalability/scenario/digital-twin-vnf/deploy_containers.sh $i
-
-    sleep 20
-
-    if (( $i == 2)) ; then
-      /home/niryo/digital-twin-scalability/scenario/remote-controllers-vnf/deploy_container.sh $i
-    fi
-
-    sleep 600
+    #sleep 600
 
 done
 
