@@ -1,6 +1,5 @@
 #!/bin/bash
 # Assemble docker image. 
-echo 'Remember that you need to list and add your xauth keys into the Dockerfile for this to work.'
 
 if [ $# -eq 0 ]
   then
@@ -24,10 +23,10 @@ docker run \
         --ip=$ROS_IP \
         -e ROS_MASTER_URI=$ROS_MASTER_URI \
         -e ROS_IP=$ROS_IP \
-        --add-host niryo-one-sim:$SIM_HOST \
-        --add-host niryo-stack:127.0.0.1 \
+        --add-host niryo-one-sim:$SIM_DRIVERS \
+        --add-host niryo-stack:$ROS_IP \
 	--privileged=true \
         -v /home/user/logs:/home/niryo/scripts/logs \
-        niryo-one-full-stack
+        niryo-one-full-stack:latest
 #       bash
 #       --user root \
